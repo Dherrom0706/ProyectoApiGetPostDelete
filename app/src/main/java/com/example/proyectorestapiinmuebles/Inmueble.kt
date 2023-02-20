@@ -10,8 +10,8 @@ data class Inmueble(
     var metrosUtiles:Int,
     var ubicacion: String,
     var zona: String,
-    var fechaPublicacion: Date,
+    var fechaPublicacion: String,
     var habitaciones: Int,
     var bannos: Int,
-    var idInmueble: Int
+    var idInmueble: Int?
     )

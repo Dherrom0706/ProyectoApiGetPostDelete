@@ -7,6 +7,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -14,6 +15,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var adapter: InmuebleAdapter
@@ -28,14 +30,71 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun listeners() {
-        findViewById<Button>(R.id.btnBorrar).setOnClickListener {
+        findViewById<FloatingActionButton>(R.id.btn_add).setOnClickListener {
+            var inmueble = Inmueble(
+                "Mi casa",
+                12F,
+                "Hola",
+                200,
+                120,
+                "Ubicacion",
+                "Ejido",
+                "2010-10-10",
+                1,
+                1,
+                null)
+            var call =getRetrofitList().create(APIService::class.java)
 
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    val inmuebles = call.addInmueble(inmueble).body()
+                    withContext(Dispatchers.Main) {
+                        if (inmuebles != null) {
+                            adapter.datos.add(inmuebles)
+                            adapter.notifyDataSetChanged()
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e("Inmuebles", "Error al obtener inmuebles", e)
+                }
+            }
+
+        }
+
+        findViewById<Button>(R.id.btnBorrar).setOnClickListener {
+            var inmueble = Inmueble(
+                "Mi casa",
+                12F,
+                "Hola",
+                200,
+                120,
+                "Ubicacion",
+                "Ejido",
+                "2010-10-10",
+                1,
+                1,
+                null)
+            var call =getRetrofitList().create(APIService::class.java)
+
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+                    val inmuebles = call.addInmueble(inmueble).body()
+                    withContext(Dispatchers.Main) {
+                        if (inmuebles != null) {
+                            adapter.datos.add(inmuebles)
+                            adapter.notifyDataSetChanged()
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e("Inmuebles", "Error al obtener inmuebles", e)
+                }
+            }
         }
     }
 
     private fun getRetrofitList(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://10.10.40.51:8080/api/")
+            .baseUrl("http://10.10.30.84:8080/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
