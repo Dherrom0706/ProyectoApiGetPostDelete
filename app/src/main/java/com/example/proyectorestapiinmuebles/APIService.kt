@@ -6,16 +6,20 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Url
 
 interface APIService {
 
-    @GET("inmuebles")
+    @GET("api/inmuebles")
     suspend fun getListOfHouses(): Response<List<Inmueble>>
 
-    @DELETE
-    suspend fun borrarInmueble(@Url url: String): Response<ResponseBody>
+    @DELETE("api/inmuebles/{id}")
+    suspend fun borrarInmueble(@Path("id") id: Int?): Response<ResponseBody>
 
-    @POST("inmuebles")
+    @POST("api/inmuebles")
     suspend fun addInmueble(@Body inmueble: Inmueble): Response<Inmueble>
+
+    @POST("api/inmuebles/{id}")
+    suspend fun actualizarInmueble(@Path("id") id: Int?,@Body inmueble: Inmueble): Response<Inmueble>
 }

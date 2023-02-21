@@ -4,7 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class InmuebleAdapter (var datos: MutableList<Inmueble>):RecyclerView.Adapter<InmuebleViewHolder>() {
+class InmuebleAdapter (var datos: MutableList<Inmueble>,private val onItemDelete:(Inmueble)->Unit,private val onItemUpdate:(Inmueble)->Unit ):RecyclerView.Adapter<InmuebleViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InmuebleViewHolder {
         // inflar la vista para cada elemento del RecyclerView
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.usuarios_esqueleto, parent, false)
@@ -20,7 +21,14 @@ class InmuebleAdapter (var datos: MutableList<Inmueble>):RecyclerView.Adapter<In
         holder.titulo.text = inmueble.titulo
         holder.precio.text = "$ ${inmueble.precio}"
         holder.ubicacion.text = inmueble.ubicacion
+        holder.btn_borrar.setOnClickListener {
+            onItemDelete(inmueble)
+        }
+        holder.btn_update.setOnClickListener {
+            onItemUpdate(inmueble)
+        }
     }
+
 
 
 }
